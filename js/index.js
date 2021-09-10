@@ -1,7 +1,6 @@
 // import * as PIXI from 'pixi.js';
 
 import Player from "./model/Player.js";
-import Spawner from "./model/Spawner.js";
 import Zombie from "./model/Zombie.js";
 
 // import Victor from "victor.js";
