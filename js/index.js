@@ -1,6 +1,7 @@
 // import * as PIXI from 'pixi.js';
 
 import Player from "./model/Player.js";
+import Spawner from "./model/Spawner.js";
 import Zombie from "./model/Zombie.js";
 
 // import Victor from "victor.js";
@@ -8,7 +9,7 @@ import Zombie from "./model/Zombie.js";
 
 
 // taille du canvas récupéré sur .html
-let canvasSize = 256;
+let canvasSize = 512;
 const canvas = document.getElementById("mycanvas");
 //instance de pixi
 const app = new PIXI.Application({
@@ -20,11 +21,27 @@ const app = new PIXI.Application({
 
 const player= new Player(app);
 // console.log(player);
+// const zombieSpawner= new Spawner(zombie);
+// console.log(zombieSpawner.spawns);
 
-const zombie= new Zombie(app, player);
+const zombieSpawn= [];
 
-//game loop, anim du projet, pour faire tourner le carré en fonction de la position de la souris, bouger les personnages
+
+const horde= setInterval(()=> {
+    for(let i=0; i < 3; i++){
+        zombieSpawn.push(new Zombie(app, player));    
+    }
+}, 5000);
+
+
+
+// console.log(zombieSpawner.spawn());
+
+// zombieSpawner.spawns.forEach(zombie=> console.log(zombie.zombie));
+
+// game loop, anim du projet, pour faire tourner le carré en fonction de la position de la souris, bouger les personnages
 app.ticker.add((delta) => {
     player.update();
-    zombie.update();
+    // console.log(zombieSpawner.spawns)
+    zombieSpawn.forEach(zombie=> zombie.update());
 });

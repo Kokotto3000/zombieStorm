@@ -52,7 +52,7 @@ export default class Zombie{
         // console.log(e)
         // console.log(s.distance(e))
         //pour que l'ennemi s'arrête s'il rentre en collision avec le joueur et respawn
-        console.log(this.player.width);
+        // console.log(this.player.width);
         if(e.distance(s) <= this.player.width / 2){
             
             let r2= this.randomSpawnPoint();
