@@ -1,3 +1,5 @@
+import Shooting from "./Shooting.js";
+
 export default class Player{
     constructor(app){
         this.app= app;
@@ -17,9 +19,13 @@ export default class Player{
 
         //affichage du carré
         this.app.stage.addChild(this.player);
+
+        this.lastMouseButton= 0;
+        this.shooting= new Shooting(app, this.player);
     }
 
     update(){
+        const mouse= this.app.renderer.plugins.interaction.mouse;
         const cursorPosition = this.app.renderer.plugins.interaction.mouse.global;
         // https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Math/atan2
         let angle =
@@ -30,5 +36,11 @@ export default class Player{
             Math.PI / 2;
             // le joueur tourne en fonction de cet angle
         this.player.rotation = angle;
+
+        if(mouse.buttons !== this.lastMouseButton){
+            this.shooting.shoot= mouse.buttons !== 0;
+            this.lastMouseButton= mouse.buttons;
+        }
+        this.shooting.update();
     }
 }

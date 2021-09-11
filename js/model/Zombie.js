@@ -67,4 +67,8 @@ export default class Zombie{
         }
         
     }
+
+    kill(){
+        this.app.stage.removeChild(this.zombie);
+    }
 }
