@@ -40,7 +40,7 @@ export default class Shooting{
         this.bullets.push(bullet);
         this.app.stage.addChild(bullet);
         //attention il faut retirer les bullets du tableau au fu et à mesure qu'elles sont sensées disparaître
-        console.log(this.bullets.length, this.app.stage.children.length);
+        // console.log(this.bullets.length, this.app.stage.children.length);
     }
 
     set shoot(shooting){

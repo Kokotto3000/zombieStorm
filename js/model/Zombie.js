@@ -18,6 +18,12 @@ export default class Zombie{
         this.app.stage.addChild(this.zombie);
     }
 
+    attack(){
+        if(this.attacking) return;
+        this.attacking= true;
+        this.interval= setInterval(()=> this.player.bitten(), 500);
+    }
+
     //spawning zombies
     randomSpawnPoint(){
         let edge= Math.floor(Math.random() * 4); //donne un chiffre en 0 et 3, pour les 4 coins du canvas
@@ -54,10 +60,10 @@ export default class Zombie{
         //pour que l'ennemi s'arrête s'il rentre en collision avec le joueur et respawn
         // console.log(this.player.width);
         if(e.distance(s) <= this.player.width / 2){
-            
-            let r2= this.randomSpawnPoint();
-            // console.log(r);
-            this.zombie.position.set(r2.x, r2.y);
+            this.attack();
+            // let r2= this.randomSpawnPoint();
+            // // console.log(r);
+            // this.zombie.position.set(r2.x, r2.y);
             return;
         }else{
             const d= s.subtract(e);
@@ -69,6 +75,7 @@ export default class Zombie{
     }
 
     kill(){
+        clearInterval(this.interval);
         this.app.stage.removeChild(this.zombie);
     }
 }

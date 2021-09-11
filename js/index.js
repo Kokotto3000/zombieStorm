@@ -52,7 +52,7 @@ app.ticker.add((delta) => {
 });
 
 function bulletHitTest(bullets, zombies, bulletRadius, zombieRadius){
-    bullets.forEach(bullet=> {
+    bullets.forEach((bullet)=> {
         zombies.forEach((zombie, index) => {
             let dx= zombie.zombie.position.x - bullet.position.x;
             let dy= zombie.zombie.position.y - bullet.position.y;
@@ -60,6 +60,9 @@ function bulletHitTest(bullets, zombies, bulletRadius, zombieRadius){
             if(distance < bulletRadius + zombieRadius){
                 zombies.splice(index, 1);
                 zombie.kill();
+                let removedBullet= bullets.shift();
+                //enlève bien les bullets mais pas les zombies ;)
+                app.stage.removeChild(removedBullet);
             }
         })
     })
