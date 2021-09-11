@@ -45,7 +45,8 @@ export default class Player{
         if(this.health <= 0) this.dead= true;
     }
 
-    update(){
+    update(delta){
+        if(this.dead) return;
         // this.bitten();
         const mouse= this.app.renderer.plugins.interaction.mouse;
         const cursorPosition = this.app.renderer.plugins.interaction.mouse.global;
@@ -63,6 +64,6 @@ export default class Player{
             this.shooting.shoot= mouse.buttons !== 0;
             this.lastMouseButton= mouse.buttons;
         }
-        this.shooting.update();
+        this.shooting.update(delta);
     }
 }

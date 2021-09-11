@@ -51,7 +51,8 @@ export default class Zombie{
         // console.log(spawnPoint);
     }
     
-    update(){
+    update(delta){
+        // if(this.player.dead) return;
         const e = new Victor(this.zombie.position.x, this.zombie.position.y);
         const s = new Victor(this.player.player.position.x, this.player.player.position.y);
 
@@ -68,7 +69,7 @@ export default class Zombie{
         }else{
             const d= s.subtract(e);
             // console.log(d);
-            const v= d.normalize().multiply(this.speed);
+            const v= d.normalize().multiply(this.speed * delta);
             this.zombie.position.set(this.zombie.position.x + v.x, this.zombie.position.y + v.y);
         }
         

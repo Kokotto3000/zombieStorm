@@ -52,7 +52,7 @@ export default class Shooting{
         }
     }
 
-    update(){
-        this.bullets.forEach(bullet=> bullet.position.set(bullet.position.x + bullet.velocity.x, bullet.position.y + bullet.velocity.y));
+    update(delta){
+        this.bullets.forEach(bullet=> bullet.position.set(bullet.position.x + bullet.velocity.x * delta, bullet.position.y + bullet.velocity.y * delta));
     }
 }

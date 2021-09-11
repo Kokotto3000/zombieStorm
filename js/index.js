@@ -2,10 +2,11 @@
 
 import Player from "./model/Player.js";
 import Spawner from "./model/Spawner.js";
-import Zombie from "./model/Zombie.js";
 
 // import Victor from "victor.js";
 //import Matter from "matter-js";
+
+//trouver un moyen pour que les zombie ne meurent pas systématiquement quand ils nous mordent et qu'on tire quelquesoit la direction du tir
 
 
 // taille du canvas récupéré sur .html
@@ -33,23 +34,40 @@ const player= new Player(app);
 //     }
 // }, 5000);
 
-const hordeSpawn= new Spawner(app, player);
+let gameStartScene= createScene("Click to Start");
+app.gameStarted= false;
+let gameOverScene= createScene("Game Over");
+gameOverScene.visible= false;
+
+let hordeSpawn;
+
+console.log(player.dead);
+
 // console.log(hordeSpawn);
 
 // console.log(zombieSpawner.spawn());
 
 // zombieSpawner.spawns.forEach(zombie=> console.log(zombie.zombie));
 
+
+
 // game loop, anim du projet, pour faire tourner le carré en fonction de la position de la souris, bouger les personnages
-app.ticker.add((delta) => {
-    player.update();
-    // console.log(zombieSpawner.spawns)
-    // zombieSpawn.forEach(zombie=> zombie.update());
-    hordeSpawn.horde.forEach(zombie => {
-        zombie.update();
-    });
-    bulletHitTest(player.shooting.bullets, hordeSpawn.horde, 5, 16);
-});
+function gameLoop(){    
+    //visible est l'inverse de gameStarted
+    gameStartScene.visible= !app.gameStarted;
+    //delta pour éviter les différences de framerate
+        app.ticker.add((delta) => {
+            gameOverScene.visible= player.dead;
+            player.update(delta);        
+            // console.log(zombieSpawner.spawns)
+            // zombieSpawn.forEach(zombie=> zombie.update());
+            hordeSpawn.horde.forEach(zombie => {
+                zombie.update(delta);
+            });
+            bulletHitTest(player.shooting.bullets, hordeSpawn.horde, 5, 16);
+        });
+    }
+
 
 function bulletHitTest(bullets, zombies, bulletRadius, zombieRadius){
     bullets.forEach((bullet)=> {
@@ -64,6 +82,33 @@ function bulletHitTest(bullets, zombies, bulletRadius, zombieRadius){
                 //enlève bien les bullets mais pas les zombies ;)
                 app.stage.removeChild(removedBullet);
             }
-        })
-    })
+        });
+    });
 }
+
+//pour l'affichage du texte du jeu
+function createScene(sceneText){
+    const sceneContainer= new PIXI.Container();
+    const text= new PIXI.Text(sceneText);
+    text.x= app.screen.width / 2;
+    text.y= 0;
+    text.anchor.set(.5, 0);
+    sceneContainer.zIndex= 1;
+    sceneContainer.addChild(text);
+    app.stage.addChild(sceneContainer);
+    return sceneContainer;
+}
+
+function startGame(){
+    if(!app.gameStarted){
+        app.gameStarted= true;
+        hordeSpawn= new Spawner(app, player);
+         
+        gameLoop();
+    }
+    return;
+}
+
+
+document.addEventListener("click", startGame);
+
