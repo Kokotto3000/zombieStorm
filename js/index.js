@@ -9,7 +9,9 @@ import { loader} from "./model/globals.js"
 //import Matter from "matter-js";
 
 //trouver un moyen pour que les zombie ne meurent pas systématiquement quand ils nous mordent et qu'on tire quelquesoit la direction du tir
-
+let options = {
+    crossOrigin: true
+};
 
 // taille du canvas récupéré sur .html
 let canvasSize = 200;
@@ -115,9 +117,9 @@ function createScene(sceneText){
 async function loadAssets(){
     return new Promise((resolve, reject) => {       
         // const loader= new PIXI.Loader();
-        zombies.forEach(z => loader.add(`./js/data/${z}.json`));
-        loader.add("hero", "./js/data/hero_male.json");
-        loader.add("bullet", "../assets/img/bullet.png");
+        zombies.forEach(z => loader.add(`./js/data/${z}.json`, options));
+        loader.add("hero", "./js/data/hero_male.json", options);
+        loader.add("bullet", "../assets/img/bullet.png", options);
         loader.onComplete.add(resolve);
         loader.onError.add(reject);
         loader.load();
