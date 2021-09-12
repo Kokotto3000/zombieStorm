@@ -17,7 +17,7 @@ export default class Spawner{
         
     }
 
-    get zombieRadius(){
-        return this.horde.forEach(zombie => zombie.radius);
-    }
+    // get zombieRadius(){
+    //     return this.horde.forEach(zombie => zombie.radius);
+    // }
 }

@@ -1,3 +1,5 @@
+import { zombies, loader } from "./globals.js";
+
 export default class Zombie{
     constructor(app, player){
         //attention, il y a déjà app dans player... peut-être qu'il y a quelquechose à faire de ce côté
@@ -6,15 +8,26 @@ export default class Zombie{
         // console.log(this.player);
 
         //création des ennemis
-        this.radius= 16;
+        // this.radius= 16;
         this.speed= 2;
         this.zombie= new PIXI.Graphics();
         let r= this.randomSpawnPoint();
         // console.log(r);
+
+        let zombieName= zombies[Math.floor(Math.random()*zombies.length)];
+        this.speed= zombieName === "quickzee" ? 1 : .25;
+        let sheet= loader.resources[`./js/data/${zombieName}.json`].spritesheet;
+        this.zombie= new PIXI.AnimatedSprite(sheet.animations.walk);
+        this.bite= new PIXI.AnimatedSprite(sheet.animations.attack);
+        this.die= new PIXI.AnimatedSprite(sheet.animations.die);
+        this.zombie.animationSpeed= zombieName === "quickzee" ? .2 : .1;
+        this.zombie.play();
+        this.zombie.anchor.set(.5);
         this.zombie.position.set(r.x, r.y);
-        this.zombie.beginFill(0xFF0000, 1);
-        this.zombie.drawCircle(0, 0, this.radius);
-        this.zombie.endFill();
+        this.zombie.zIndex= r.zIndex;
+        // this.zombie.beginFill(0xFF0000, 1);
+        // this.zombie.drawCircle(0, 0, this.radius);
+        // this.zombie.endFill();
         this.app.stage.addChild(this.zombie);
     }
 
@@ -22,6 +35,9 @@ export default class Zombie{
         if(this.attacking) return;
         this.attacking= true;
         this.interval= setInterval(()=> this.player.bitten(), 500);
+        this.zombie.textures= this.bite.textures;
+        this.zombie.animationSpeed= .1;
+        this.zombie.play();
     }
 
     //spawning zombies
@@ -33,18 +49,22 @@ export default class Zombie{
         switch(edge){
         case 0: //top
             spawnPoint.x= canvasSize * Math.random();
+            spawnPoint.zIndex= 0;
             break;
         case 1: //right
             spawnPoint.x= canvasSize;
             spawnPoint.y= canvasSize * Math.random();
+            spawnPoint.zIndex= 1;
             break;
         case 2: //bottom
             spawnPoint.x= canvasSize * Math.random();
             spawnPoint.y= canvasSize;
+            spawnPoint.zIndex= 2;
             break;
         default: //left
             spawnPoint.x= 0;
             spawnPoint.y= canvasSize * Math.random();
+            spawnPoint.zIndex= 0;
             break;
         }
         return spawnPoint;
@@ -70,6 +90,7 @@ export default class Zombie{
             const d= s.subtract(e);
             // console.log(d);
             const v= d.normalize().multiply(this.speed * delta);
+            this.zombie.scale.x= v.x < 0 ? 1 : -1;
             this.zombie.position.set(this.zombie.position.x + v.x, this.zombie.position.y + v.y);
         }
         
@@ -77,6 +98,12 @@ export default class Zombie{
 
     kill(){
         clearInterval(this.interval);
-        this.app.stage.removeChild(this.zombie);
+        // this.app.stage.removeChild(this.zombie);
+        this.zombie.textures= this.die.textures;
+        this.zombie.zIndex= 0;
+        this.zombie.loop= false;
+        //si on veut que le zombie disparaisse au bout d'un certain temps
+        this.zombie.onComplete = ()=> setTimeout(()=> this.app.stage.removeChild(this.zombie), 10000);
+        this.zombie.play();
     }
 }

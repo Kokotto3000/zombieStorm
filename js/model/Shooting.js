@@ -1,3 +1,5 @@
+import { loader } from "./globals.js";
+
 export default class Shooting{
     constructor(app, player){
         // console.log(player);
@@ -25,14 +27,18 @@ export default class Shooting{
             );
 
         this.bullets.forEach(bullet=> this.app.stage.addChild(bullet));
-        
-        const bullet= new PIXI.Graphics();
-        // console.log(this.player)
+        const bullet= new PIXI.Sprite(loader.resources.bullet.texture);
+        bullet.anchor.set(.5);
+        bullet.scale.set(.2);
         bullet.position.set(this.player.position.x, this.player.position.y);
-        bullet.beginFill(0x0000ff, 1);
-        bullet.drawCircle(0, 0, this.bulletRadius);
-        bullet.endFill();
-        let angle= this.player.rotation - Math.PI / 2;
+        bullet.rotation= this.player.angle;
+        // const bullet= new PIXI.Graphics();
+        // // console.log(this.player)
+        // bullet.position.set(this.player.position.x, this.player.position.y);
+        // bullet.beginFill(0x0000ff, 1);
+        // bullet.drawCircle(0, 0, this.bulletRadius);
+        // bullet.endFill();
+        let angle= this.player.angle - Math.PI / 2;
         bullet.velocity= new Victor(
             Math.cos(angle), 
             Math.sin(angle))
