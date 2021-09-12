@@ -76,6 +76,7 @@ async function initGame(){
 
     }catch(error){
         console.log(error.message);
+        console.log(error);
         console.log("load failed");
     }
 }
@@ -119,15 +120,13 @@ async function loadAssets(){
         // const loader= new PIXI.Loader();
         zombies.forEach(z => loader.add(`./js/data/${z}.json`, options));
         loader.add("hero", "./js/data/hero_male.json", options);
-        loader.add("bullet", "../assets/img/bullet.png", options);
-        loader.onComplete.add(resolve);
-        loader.onError.add(reject);
+        loader.add("bullet", "./assets/img/bullet.png", options);
+        
         loader.load();
         
+        loader.onComplete.add(resolve);
+        loader.onError.add(reject);
     })
 }
 
 initGame();
-
-
-
