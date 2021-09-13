@@ -1,0 +1,32 @@
+{
+  "name": "zombie-test",
+  "version": "1.0.0",
+  "description": "Zombies are coming",
+  "main": "index.js",
+  "scripts": {
+    "start": "snowpack dev",
+    "build": "snowpack build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kokotto3000/zombieStorm.git"
+  },
+  "keywords": [
+    "zombies",
+    "shooting",
+    "game"
+  ],
+  "author": "Kokotto3000",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kokotto3000/zombieStorm/issues"
+  },
+  "homepage": "https://github.com/Kokotto3000/zombieStorm#readme",
+  "dependencies": {
+    "@pixi/particle-emitter": "^5.0.2",
+    "pixi.js": "^6.1.2"
+  },
+  "devDependencies": {
+    "snowpack": "^3.8.8"
+  }
+}

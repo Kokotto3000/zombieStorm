@@ -54,7 +54,7 @@ export default class Zombie{
         case 1: //right
             spawnPoint.x= canvasSize;
             spawnPoint.y= canvasSize * Math.random();
-            spawnPoint.zIndex= 1;
+            spawnPoint.zIndex= 0;
             break;
         case 2: //bottom
             spawnPoint.x= canvasSize * Math.random();
@@ -103,7 +103,7 @@ export default class Zombie{
         this.zombie.zIndex= 0;
         this.zombie.loop= false;
         //si on veut que le zombie disparaisse au bout d'un certain temps
-        this.zombie.onComplete = ()=> setTimeout(()=> this.app.stage.removeChild(this.zombie), 10000);
+        this.zombie.onComplete = ()=> setTimeout(()=> this.app.stage.removeChild(this.zombie), 30000);
         this.zombie.play();
     }
 }

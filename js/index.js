@@ -4,9 +4,7 @@ import { zombies } from "./model/globals.js";
 import Player from "./model/Player.js";
 import Spawner from "./model/Spawner.js";
 import { loader} from "./model/globals.js"
-
-// import Victor from "victor.js";
-//import Matter from "matter-js";
+import Weather from "./model/Weather.js";
 
 //trouver un moyen pour que les zombie ne meurent pas systématiquement quand ils nous mordent et qu'on tire quelquesoit la direction du tir
 let options = {
@@ -14,7 +12,7 @@ let options = {
 };
 
 // taille du canvas récupéré sur .html
-let canvasSize = 200;
+let canvasSize = 400;
 const canvas = document.getElementById("mycanvas");
 //instance de pixi
 const app = new PIXI.Application({
@@ -35,6 +33,7 @@ async function initGame(){
         await loadAssets();
         console.log("loaded...");
 
+        app.weather= new Weather(app);
         const player= new Player(app);
 
         let hordeSpawn;
@@ -66,7 +65,7 @@ async function initGame(){
             if(!app.gameStarted){
                 app.gameStarted= true;
                 hordeSpawn= new Spawner(app, player);
-                
+                app.weather.enableSound();
                 gameLoop();
             }
             return;
@@ -121,7 +120,7 @@ async function loadAssets(){
         zombies.forEach(z => loader.add(`./js/data/${z}.json`, options));
         loader.add("hero", "./js/data/hero_male.json", options);
         loader.add("bullet", "./assets/img/bullet.png", options);
-        
+        loader.add("rain", "./assets/img/rain.png", options)
         loader.load();
         
         loader.onComplete.add(resolve);
