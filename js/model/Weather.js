@@ -3,6 +3,7 @@ import { loader } from './globals.js';
 
 export default class Weather{
     constructor(app){
+        console.log(loader);
         this.lightningGap= {min: 7000, max: 14000};
         this.app= app;
         this.createAudio();
@@ -124,7 +125,8 @@ export default class Weather{
     }
 
     enableSound(){
-        this.sound= true;        
+        
+        this.sound= true;    
         this.rain.play();
         this.app.stage.addChild(this.lightning);
         setTimeout(()=> this.app.stage.removeChild(this.lightning), 200);

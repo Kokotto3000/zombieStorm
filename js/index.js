@@ -120,11 +120,15 @@ async function loadAssets(){
         zombies.forEach(z => loader.add(`./js/data/${z}.json`, options));
         loader.add("hero", "./js/data/hero_male.json", options);
         loader.add("bullet", "./assets/img/bullet.png", options);
-        loader.add("rain", "./assets/img/rain.png", options)
+        loader.add("rain", "./assets/img/rain.png", options);
+        // PIXI.sound.add('rain', './assets/sound/rain.mp3');
+        // loader.add("rainSound", "", options);
         loader.load();
         
         loader.onComplete.add(resolve);
         loader.onError.add(reject);
+
+        
     })
 }
 
