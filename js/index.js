@@ -126,9 +126,7 @@ async function loadAssets(){
         loader.load();
         
         loader.onComplete.add(resolve);
-        loader.onError.add(reject);
-
-        
+        loader.onError.add(reject);        
     })
 }
 

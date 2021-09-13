@@ -2,6 +2,9 @@ export const zombies= ["tankzee", "dogzee", "femalezee", "nursezee", "quickzee",
 
 export const loader= new PIXI.Loader();
 
+// export const rainSound= new Audio("../../assets/sound/rain.mp3");
+// export const thunderSound= new Audio("../../assets/sound/thunder.mp3");
+
 // //https://pixijs.io/pixi-particles-editor/#rain
 // export let rain = {
 //     "alpha": {
