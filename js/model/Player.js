@@ -79,4 +79,12 @@ export default class Player{
         }
         this.shooting.update(delta);
     }
+
+    set scale(s){
+        this.player.scale.set(s);
+    }
+    
+    get scale(){
+        return this.player.scale;
+    }
 }
