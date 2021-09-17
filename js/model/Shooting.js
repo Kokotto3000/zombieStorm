@@ -12,6 +12,8 @@ export default class Shooting{
     }
 
     fire(){
+        shoot.currentTime= 0;
+        shoot.play();
         //pour empêcher de remplir le tableau à l'infini, pas la meilleure soluce, à améliorer
         if(this.bullets.length >= this.maxBullets){
             let bullet= this.bullets.shift();

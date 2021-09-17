@@ -103,7 +103,7 @@ async function initGame(){
                 gameScene.visible= false;
                 gameScene= createScene("ZombieStorm", "Click to Start");
                 app.gameState= "intro";
-                // music.play()
+                music.play()
                 break;
             case "intro":
                 
@@ -115,7 +115,7 @@ async function initGame(){
                 hordeSpawn= new Spawner(app, player);
                 app.weather.enableSound();
                 gameLoop();
-                //zombieHorde.play();
+                zombieHorde.play();
                 break;
             default:
                 break;

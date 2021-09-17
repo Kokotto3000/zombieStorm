@@ -9,7 +9,7 @@ export default class Zombie{
 
         //création des ennemis
         // this.radius= 16;
-        this.speed= 2;
+        // this.speed= 2;
         this.zombie= new PIXI.Graphics();
         let r= this.randomSpawnPoint();
         // console.log(r);
@@ -97,6 +97,8 @@ export default class Zombie{
     }
 
     kill(){
+        squash.currentTime= 0;
+        squash.play();
         clearInterval(this.interval);
         // this.app.stage.removeChild(this.zombie);
         this.zombie.textures= this.die.textures;
@@ -105,5 +107,6 @@ export default class Zombie{
         //si on veut que le zombie disparaisse au bout d'un certain temps
         this.zombie.onComplete = ()=> setTimeout(()=> this.app.stage.removeChild(this.zombie), 30000);
         this.zombie.play();
+        this.zombie.zIndex= -1;
     }
 }
