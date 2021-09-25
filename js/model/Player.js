@@ -48,8 +48,8 @@ export default class Player{
         this.dead= false;
     }
 
-    bitten(){
-        this.health -= 1;
+    bitten(damage){
+        this.health -= damage;
         this.healthBar.width= (this.health/this.maxHealth)* this.healthBar.initialWidth;
         if(this.health <= 0) this.dead= true;
     }

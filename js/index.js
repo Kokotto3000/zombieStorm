@@ -12,6 +12,8 @@ let options = {
     crossOrigin: true
 };
 
+
+
 // taille du canvas récupéré sur .html
 let canvasSize = 400;
 const canvas = document.getElementById("mycanvas");
@@ -26,6 +28,16 @@ const app = new PIXI.Application({
 
 PIXI.settings.SCALE_MODE= PIXI.SCALE_MODES.NEAREST;
 
+let score= 0;
+let scoreText;
+
+function displayScore(score){
+    scoreText= new PIXI.Text(score);
+    scoreText.style= new PIXI.TextStyle(subTextStyle);
+    scoreText.x= app.screen.width - scoreText.width;
+}
+
+displayScore(score);
 
 
 async function initGame(){
@@ -47,6 +59,7 @@ async function initGame(){
         gameStartScene.visible= false;
         let gameOverScene= createScene("ZombieStorm", "Game Over");
         gameOverScene.visible= false;
+        
         // if(player.dead) app.gameState.GAMEOVER;
         // //visible est l'inverse de gameStarted
         // gamePreIntroScene.visible= app.gameState === "preintro";
@@ -71,7 +84,7 @@ async function initGame(){
                 zombie.update(delta);
             });
             //5 et 16 sont les radius de collision, les mettre dans des variables
-            bulletHitTest(player.shooting.bullets, hordeSpawn.horde, 5, 16);
+            bulletHitTest(player.shooting.bullets, hordeSpawn.horde, 1, 16);
 
             switch(app.gameState){
                 case "preintro":
@@ -83,6 +96,10 @@ async function initGame(){
                     // if(player.scale <= 1) app.gameState= "start";
                     break;
                 case "running":
+                    
+                    app.stage.removeChild(scoreText);
+                    displayScore(score);
+                    app.stage.addChild(scoreText);
                     
                     break;
                 case "gameover":
@@ -111,6 +128,7 @@ async function initGame(){
               
             case "start":
                 gameScene.visible= false;
+                // scoreText.visible= true;
                 app.gameState= "running";
                 hordeSpawn= new Spawner(app, player);
                 app.weather.enableSound();
@@ -146,9 +164,12 @@ function bulletHitTest(bullets, zombies, bulletRadius, zombieRadius){
             if(distance < bulletRadius + zombieRadius){
                 zombies.splice(index, 1);
                 zombie.kill();
+                score += 1;
+                // console.log(score);
                 let removedBullet= bullets.shift();
                 //enlève bien les bullets mais pas les zombies ;)
                 app.stage.removeChild(removedBullet);
+                return score;
             }
         });
     });
@@ -194,3 +215,5 @@ async function loadAssets(){
 }
 
 initGame();
+
+

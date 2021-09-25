@@ -15,12 +15,13 @@ export default class Zombie{
         // console.log(r);
 
         let zombieName= zombies[Math.floor(Math.random()*zombies.length)];
-        this.speed= zombieName === "quickzee" ? 1 : .25;
+        this.speed= loader.resources[`./js/data/${zombieName}.json`].data.meta.speed;
         let sheet= loader.resources[`./js/data/${zombieName}.json`].spritesheet;
         this.zombie= new PIXI.AnimatedSprite(sheet.animations.walk);
         this.bite= new PIXI.AnimatedSprite(sheet.animations.attack);
         this.die= new PIXI.AnimatedSprite(sheet.animations.die);
-        this.zombie.animationSpeed= zombieName === "quickzee" ? .2 : .1;
+        this.zombie.animationSpeed= loader.resources[`./js/data/${zombieName}.json`].data.meta.animationSpeed;
+        this.zombie.damage= loader.resources[`./js/data/${zombieName}.json`].data.meta.damage;
         this.zombie.play();
         this.zombie.anchor.set(.5);
         this.zombie.position.set(r.x, r.y);
@@ -34,7 +35,7 @@ export default class Zombie{
     attack(){
         if(this.attacking) return;
         this.attacking= true;
-        this.interval= setInterval(()=> this.player.bitten(), 500);
+        this.interval= setInterval(()=> this.player.bitten(this.zombie.damage), 500);
         this.zombie.textures= this.bite.textures;
         this.zombie.animationSpeed= .1;
         this.zombie.play();
