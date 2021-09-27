@@ -1,3 +1,5 @@
+export const canvas = document.getElementById("mycanvas");
+
 export const zombies= [ "tankzee", "dogzee", "femalezee", "nursezee", "quickzee", "copzee" ];
 
 export const loader= new PIXI.Loader();

@@ -1,10 +1,11 @@
 import Shooting from "./Shooting.js";
-import { loader } from "./globals.js";
+import { canvas, loader } from "./globals.js";
 
 export default class Player{
     constructor(app){
         this.app= app;
-        // console.log(this.app);
+        
+
         //taille du carré/joueur
         this.width = 32;
         
@@ -46,6 +47,7 @@ export default class Player{
         this.app.stage.sortableChildren= true;
         this.app.stage.addChild(this.healthBar);
         this.dead= false;
+        
     }
 
     bitten(damage){
@@ -54,11 +56,15 @@ export default class Player{
         if(this.health <= 0) this.dead= true;
     }
 
-    update(delta){
+    update(delta, cursorPosition, buttons){
         if(this.dead) return;
-        // this.bitten();
-        const mouse= this.app.renderer.plugins.interaction.mouse;
-        const cursorPosition = this.app.renderer.plugins.interaction.mouse.global;
+        // this.bitten();  
+        
+
+        // const mouse= this.app.renderer.plugins.interaction.mouse;
+        
+        
+        // const cursorPosition = this.app.renderer.plugins.interaction.mouse.global;
         // https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Math/atan2
         let angle =
             Math.atan2(
@@ -71,11 +77,11 @@ export default class Player{
         this.player.angle= this.rotation;
         this.player.scale.x= cursorPosition.x < this.player.position.x ? -1 : 1;
 
-        if(mouse.buttons !== this.lastMouseButton){
-
-            this.player.textures= mouse.buttons === 0 ? this.idle.textures : this.shoot.textures;
-            this.shooting.shoot= mouse.buttons !== 0;
-            this.lastMouseButton= mouse.buttons;
+        if(buttons !== this.lastMouseButton){
+            
+            this.player.textures= buttons === 0 ? this.idle.textures : this.shoot.textures;
+            this.shooting.shoot= buttons !== 0;
+            this.lastMouseButton= buttons;
         }
         this.shooting.update(delta);
     }

@@ -24,6 +24,7 @@
   "homepage": "https://github.com/Kokotto3000/zombieStorm#readme",
   "dependencies": {
     "@pixi/particle-emitter": "^5.0.2",
+    "howler": "^2.2.3",
     "pixi.js": "^6.1.2"
   },
   "devDependencies": {

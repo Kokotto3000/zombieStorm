@@ -4,4 +4,6 @@ export default class GameState{
     static START= "start";
     static RUNNING= "running";
     static GAMEOVER= "gameover";
+    static ENDGAME= "endgame";
+    static RESTART= "restart";
 }

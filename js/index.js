@@ -3,7 +3,7 @@
 import { textStyle, subTextStyle, zombies } from "./model/globals.js";
 import Player from "./model/Player.js";
 import Spawner from "./model/Spawner.js";
-import { loader} from "./model/globals.js"
+import { loader, canvas } from "./model/globals.js"
 import Weather from "./model/Weather.js";
 import GameState from "./model/GameState.js";
 
@@ -16,7 +16,9 @@ let options = {
 
 // taille du canvas récupéré sur .html
 let canvasSize = 400;
-const canvas = document.getElementById("mycanvas");
+
+
+
 //instance de pixi
 const app = new PIXI.Application({
     view: canvas,
@@ -26,7 +28,35 @@ const app = new PIXI.Application({
     resolution: 2
 });
 
+app.stage.interactive= true;
+
+let cursorPosition= { x: 200, y: 200};
+
+app.stage.on("pointermove", (e)=> {
+    cursorPosition= e.data.global;          
+});
+
+let buttons= 0;
+app.stage.on("pointerdown", e=> {
+    cursorPosition= e.data.global;
+    buttons= e.data.buttons;
+});
+
+app.stage.on("pointerup", e=> {
+    buttons= e.data.buttons;
+});
+
+document.addEventListener("keydown", e => {
+    if(e.code === "Space") buttons= 1;
+});
+
+document.addEventListener("keyup", e => {
+    if(e.code === "Space") buttons= 0;
+});
+
 PIXI.settings.SCALE_MODE= PIXI.SCALE_MODES.NEAREST;
+
+let endGame= false;
 
 let score= 0;
 let scoreText;
@@ -51,14 +81,18 @@ async function initGame(){
 
         app.weather= new Weather(app);
         const player= new Player(app);
-        // player.scale = 4;
+        
+        player.scale= 4;
+
         let hordeSpawn;
 
         
-        let gameStartScene= createScene("ZombieStorm", "Click to Start");
-        gameStartScene.visible= false;
-        let gameOverScene= createScene("ZombieStorm", "Game Over");
-        gameOverScene.visible= false;
+        // let gameStartScene= createScene("ZombieStorm", "Click to Start");
+        // gameStartScene.visible= false;
+        // let gameOverScene= createScene("ZombieStorm", "Game Over");
+        // gameOverScene.visible= false;
+        // let gameRestartScene= createScene("ZombieStorm", "Restart");
+        // gameRestartScene.visible= false;
         
         // if(player.dead) app.gameState.GAMEOVER;
         // //visible est l'inverse de gameStarted
@@ -72,12 +106,21 @@ async function initGame(){
                 
         //delta pour éviter les différences de framerate
         app.ticker.add((delta) => {
-            if(player.dead) app.gameState= "gameover";
+            if(player.dead) {
+                if(!endGame){
+                    endGame= true;
+                    app.gameState= "gameover";
+                }
+            }
+            
             //visible est l'inverse de gameStarted
             // gamePreIntroScene.visible= app.gameState === "preintro";
             // gameStartScene.visible= app.gameState === "start";
             // gameOverScene.visible= app.gameState === "gameover";
-            player.update(delta);        
+            
+            // console.log(cursorPosition);
+
+            player.update(delta, cursorPosition, buttons);
             // console.log(zombieSpawner.spawns)
             // zombieSpawn.forEach(zombie=> zombie.update());
             hordeSpawn.horde.forEach(zombie => {
@@ -92,8 +135,6 @@ async function initGame(){
                     break;
                 case "intro":
                     
-                    
-                    // if(player.scale <= 1) app.gameState= "start";
                     break;
                 case "running":
                     
@@ -104,13 +145,20 @@ async function initGame(){
                     break;
                 case "gameover":
                     gameScene= createScene("ZombieStorm", "Game Over");
+                    app.gameState= "endgame";
                     // console.log("game over")
                     break;
+
+                // case "endgame":
+                //     gameScene.visible= false;
+                //     break;
             }
             
             
         });
     }
+
+    
 
     function clickHandler(e){
         // console.log(app.gameState);
@@ -122,11 +170,14 @@ async function initGame(){
                 app.gameState= "intro";
                 music.play()
                 break;
+
             case "intro":
-                
+
+                player.scale= 1;
                 app.gameState= "start";
               
             case "start":
+                
                 gameScene.visible= false;
                 // scoreText.visible= true;
                 app.gameState= "running";
@@ -135,6 +186,29 @@ async function initGame(){
                 gameLoop();
                 zombieHorde.play();
                 break;
+
+            case "gameover":
+                // gameScene.visible= false;
+                // gameScene.visible= false;
+                // gameScene= createScene("ZombieStorm", "This is the end...");
+                app.gameState= "endgame";
+                
+            case "endgame":
+                gameScene.visible= false;
+                gameScene= createScene("ZombieStorm", "... restart ?");
+                app.gameState= "restart";
+                // gameScene.visible= false;
+                // gameRestartScene.visible= true;
+                // gameScene= createScene("ZombieStorm", "Restart");
+
+            case "restart":
+                document.addEventListener("click", ()=> {
+                    location.reload();
+                });
+                document.addEventListener("touchstart", ()=> {
+                    location.reload();
+                });
+
             default:
                 break;
             
@@ -142,8 +216,7 @@ async function initGame(){
     }
 
     document.addEventListener("click", clickHandler);
-        
-
+    document.addEventListener("touchstart", clickHandler);
         
 
     }catch(error){
@@ -205,8 +278,8 @@ async function loadAssets(){
         loader.add("hero", "./js/data/hero_male.json", options);
         loader.add("bullet", "./assets/img/bullet.png", options);
         loader.add("rain", "./assets/img/rain.png", options);
-        // PIXI.sound.add('rain', './assets/sound/rain.mp3');
-        // loader.add("rainSound", "", options);
+
+
         loader.load();
         
         loader.onComplete.add(resolve);
@@ -215,5 +288,3 @@ async function loadAssets(){
 }
 
 initGame();
-
-
